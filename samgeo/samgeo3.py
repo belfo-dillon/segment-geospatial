@@ -2525,7 +2525,7 @@ class SamGeo3:
         plt.axis(axis)
         plt.show()
 
-    def save_masks_image(
+    def save_masks(
         self,
         output: Optional[str] = None,
         unique: bool = True,
@@ -4777,7 +4777,7 @@ class SamGeo3Video:
 
         return formatted
 
-    def save_masks_video(
+    def save_masks(
         self,
         output_dir: str,
         img_ext: str = "png",
