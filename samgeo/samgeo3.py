@@ -1222,7 +1222,7 @@ class SamGeo3:
         max_size: Optional[int] = None,
         unique: bool = True,
         dtype: str = "uint32",
-        save_scores: bool = True,
+        save_scores: Optional[str] = None,
         bands: Optional[List[int]] = None,
         batch_size: int = 1,
         verbose: bool = True,
@@ -1279,6 +1279,9 @@ class SamGeo3:
         if not source.lower().endswith((".tif", ".tiff")):
             raise ValueError("Source must be a GeoTIFF file for tiled processing.")
 
+        if save_scores is not None and self.scores is None:
+            raise ValueError("No scores found. Cannot save scores.")
+        
         if not os.path.exists(source):
             raise ValueError(f"Source file not found: {source}")
 
@@ -1541,9 +1544,8 @@ class SamGeo3:
         with rasterio.open(output, "w", **profile) as dst:
             dst.write(output_mask, 1)
         # Save the scores
-        if save_scores:
-            score_output = output.replace('\\masks_','\\scores_')
-            with rasterio.open(score_output, "w", **profile) as dst:
+        if save_scores is not None:
+            with rasterio.open(save_scores, "w", **profile) as dst:
                 dst.write(output_score, 1)
 
         if verbose:
@@ -2656,6 +2658,7 @@ class SamGeo3:
             print(f"Saved {valid_mask_count} mask(s) to {output}")
 
             # Save scores if requested
+            # breakpoint()
             if save_scores is not None:
                 common.array_to_image(
                     scores_array, save_scores, self.source, dtype="float32", **kwargs
@@ -4800,6 +4803,7 @@ class SamGeo3Video:
             >>> sam.generate_masks("building")
             >>> sam.save_masks("output/masks/")
         """
+        # breakpoint()
         if self.outputs_per_frame is None:
             raise ValueError("No masks to save. Please run generate_masks() first.")
 
