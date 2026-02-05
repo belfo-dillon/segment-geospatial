@@ -2525,7 +2525,7 @@ class SamGeo3:
         plt.axis(axis)
         plt.show()
 
-    def save_masks(
+    def save_masks_image(
         self,
         output: Optional[str] = None,
         unique: bool = True,
@@ -4777,7 +4777,7 @@ class SamGeo3Video:
 
         return formatted
 
-    def save_masks(
+    def save_masks_video(
         self,
         output_dir: str,
         img_ext: str = "png",
@@ -4816,6 +4816,7 @@ class SamGeo3Video:
         saved_files = []
 
         # Check if we have GeoTIFF source
+        # breakpoint()
         is_geotiff = self._tif_source is not None and self._tif_source.lower().endswith(
             (".tif", ".tiff")
         )
